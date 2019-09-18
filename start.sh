@@ -18,8 +18,8 @@ then
 fi
 
 clear && 
-docker kill ssh; 
-docker rm ssh; 
-docker build -t ssh --build-arg passwd=$1 . && 
-docker run -d -p 2222:22 --name ssh -v $2:$3 ssh && 
+sudo docker kill ssh; 
+sudo docker rm ssh; 
+sudo docker build -t ssh --build-arg passwd=$1 --build-arg mnt_dir=$3 . && 
+sudo docker run -d -p 2222:22 --name ssh -v "$2":"$3" ssh && 
 ssh -p 2222 root@localhost
