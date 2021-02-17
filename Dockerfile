@@ -17,11 +17,10 @@ RUN curl https://raw.githubusercontent.com/yeltnar/gist/master/setup.sh | bash
 
 RUN echo $var_name > ~/log.txt
 
-ARG mnt_dir
-RUN mkdir /media/pi && ln -sf $mnt_dir /media/pi/TOSHIBA\ EXT
-
 ARG passwd
 RUN echo root:$passwd | chpasswd
+
+RUN echo "GatewayPorts yes" >> /etc/ssh/sshd_config
 
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
