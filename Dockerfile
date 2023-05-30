@@ -28,7 +28,7 @@ WORKDIR /app
 
 COPY init.sh /app/init.sh
 
-USER root
+USER git
 
 EXPOSE 8022
 
