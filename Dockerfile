@@ -1,27 +1,35 @@
-FROM ubuntu:16.04
+# need volume for /home/git to keep ssh keys, and a place to put the git data 
 
-RUN apt-get update && apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
+FROM alpine:3.18.0
 
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+ARG ssh_pub_key
 
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+# make git user 
+# set up ssh for git user
+# ssh only with keys
+RUN adduser -D git \
+    && passwd -u git \
+    && apk add openrc openssh git \
+    && mkdir -p /home/git/.ssh \
+    && echo "$ssh_pub_key" > /home/git/.ssh/authorized_keys \
+    && echo -e "PasswordAuthentication no" >> /etc/ssh/sshd_config \ 
+    && chmod 0700 /home/git/.ssh \
+    && chown -R git:git /home/git
+RUN chmod 644 /etc/ssh/sshd_config \
+    && chown -R git /etc/ssh \
+    && mkdir -p /run/openrc \
+    && touch /run/openrc/softlevel
 
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
+USER git 
 
-RUN apt-get install -y git
-RUN apt-get install -y curl
-RUN curl https://raw.githubusercontent.com/yeltnar/gist/master/setup.sh | bash
+RUN ssh-keygen -A
 
-RUN echo $var_name > ~/log.txt
+WORKDIR /app
 
-ARG passwd
-RUN echo root:$passwd | chpasswd
+COPY init.sh /app/init.sh
 
-RUN echo "GatewayPorts yes" >> /etc/ssh/sshd_config
+USER root
 
-EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+EXPOSE 8022
 
+CMD sh -c '/app/init.sh'

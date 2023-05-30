@@ -1,0 +1,1 @@
+podman run -p 9022:8022 -it rm ash
