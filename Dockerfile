@@ -4,10 +4,13 @@ FROM alpine:3.18.0
 
 ARG ssh_pub_key
 
+ # change this at build time to value set in deployment/pod config file
+ARG USER_ID=1111
+
 # make git user 
 # set up ssh for git user
 # ssh only with keys
-RUN adduser -D git \
+RUN adduser -D --uid $USER_ID git \
     && passwd -u git \
     && apk add openrc openssh git \
     && mkdir -p /home/git/.ssh \
