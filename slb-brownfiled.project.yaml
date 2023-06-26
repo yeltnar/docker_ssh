@@ -5,6 +5,7 @@ metadata:
   labels:
     kubernetes.io/metadata.name: slb-brownfield-users
   annotations:
+    openshift.io/sa.scc.mcs: 's0:c26,c25'
     openshift.io/sa.scc.supplemental-groups: 246000/10000
     openshift.io/sa.scc.uid-range: 246000/10000
 spec:

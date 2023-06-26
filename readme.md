@@ -2,7 +2,7 @@ For OpenShift:
 
 Create Project with the `slb-brownfiled.project.yaml` file. You don't need to use this file, but do need the user and group IDs that are shown under `openshift.io/sa.scc.uid-range` and `openshift.io/sa.scc.supplemental-groups`
 
-Within this project, create a new app with the source as this repo. When doing this, make sure to set a build environment variable containing the desired user id. ie: `USER_ID=246000`. This creates a user with the OpenShift approved range so sshd can run as non root, but ssh can access the known user. 
+Within this project, create a new app with the source as this repo. When doing this, make sure to set a **build** environment variable containing the desired user id. ie: `USER_ID=246000`. This creates a user with the OpenShift approved range so sshd can run as non root, but ssh can access the known user. 
 
 Do not create a route. Route ingress will not work with SSH. You will need to use `oc port-forward`, or expose a cluster port
 
