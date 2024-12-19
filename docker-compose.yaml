@@ -1,0 +1,17 @@
+version: "3"
+services:
+  ssh_git_server:
+    #command: tail -f /dev/null
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ssh_git_server 
+    ports:
+      - 9022:8022 
+    volumes: 
+      - ssh:/home/git/.ssh
+      - git:/git
+    restart: unless-stopped
+volumes:
+  ssh: 
+  git: 
