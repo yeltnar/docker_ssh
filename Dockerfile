@@ -12,7 +12,7 @@ ARG USER_ID=1111
 # ssh only with keys
 RUN adduser -D --uid $USER_ID git \
     && passwd -u git \
-    && apk add openrc openssh git \
+    && apk add openrc openssh git vim \
     && mkdir -p /home/git/.ssh \
     && echo "$ssh_pub_key" > /home/git/.ssh/authorized_keys \
     && echo -e "PasswordAuthentication no" >> /etc/ssh/sshd_config \ 
